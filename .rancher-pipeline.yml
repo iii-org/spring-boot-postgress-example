@@ -14,6 +14,27 @@ stages:
         #PLUGIN_MIRROR: http://10.20.0.73:32443/
         PLUGIN_MTU: "1000"
 
+  # (選擇性)部屬使用者的資料庫
+  - name: Deploy db
+    steps:
+      - applyAppConfig:
+          catalogTemplate: cattle-global-data:iii-dev-charts3-db
+          version: 0.1.0
+          name: ${CICD_GIT_REPO_NAME}-${CICD_GIT_BRANCH}-db
+          targetNamespace: ${CICD_GIT_REPO_NAME}
+          answers:
+            git.host: "10.20.0.73"
+            # 這裡是為了告訴要處理的git來源為何
+            git.repoName: ${CICD_GIT_REPO_NAME}
+            git.branch: ${CICD_GIT_BRANCH}
+            db.type: postgresql
+            db.gui: true
+            # 使用者資料庫管理密碼
+            db.username: bear
+            db.password: bearisbear
+            # 使用者初始想要建立的資料庫名稱
+            db.name: health  
+
   # 部屬使用者應用(app)
   - name: Deploy app-web
     steps:
@@ -38,23 +59,4 @@ stages:
           web.image: ${CICD_GIT_REPO_NAME}/${CICD_GIT_REPO_NAME}
           web.tag: ${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
 
-  # (選擇性)部屬使用者的資料庫
-  - name: Deploy db
-    steps:
-      - applyAppConfig:
-          catalogTemplate: cattle-global-data:iii-dev-charts3-db
-          version: 0.1.0
-          name: ${CICD_GIT_REPO_NAME}-${CICD_GIT_BRANCH}-db
-          targetNamespace: ${CICD_GIT_REPO_NAME}
-          answers:
-            git.host: "10.20.0.73"
-            # 這裡是為了告訴要處理的git來源為何
-            git.repoName: ${CICD_GIT_REPO_NAME}
-            git.branch: ${CICD_GIT_BRANCH}
-            db.type: postgresql
-            db.gui: true
-            # 使用者資料庫管理密碼
-            db.username: bear
-            db.password: bearisbear
-            # 使用者初始想要建立的資料庫名稱
-            db.name: health  
+
