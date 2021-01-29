@@ -1,4 +1,4 @@
-FROM maven as builder
+FROM maven:3-openjdk-8 as builder
 COPY ./app /app
 WORKDIR /app
 RUN ls && mvn clean install
