@@ -1,4 +1,4 @@
-ROM maven as builder
+FROM maven as builder
 COPY ./app /app
 WORKDIR /app
 RUN ls && mvn clean install
