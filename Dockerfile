@@ -1,7 +1,7 @@
 FROM maven:3-openjdk-8 as builder
 COPY ./app /app
 WORKDIR /app
-RUN ls && mvn install -DskipTests=false
+RUN ls && mvn install -DskipTests
 FROM tomcat
 RUN ["rm", "-rf", "/usr/local/tomcat/webapps/ROOT"]
 COPY --from=builder /app/build/libs/*.jar /usr/local/tomcat/webapps/ROOT.jar
